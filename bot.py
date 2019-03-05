@@ -46,22 +46,22 @@ async def bowl(ctx):
         player.stop()
 
         if score == 0:
-            await client.say(ctx.message.author.mention + " Oof, it's a gutter! Type `rebowl` to finish.")
+            await client.say(ctx.message.author.mention + " Oof, it's a gutter! Type `finish` to finish.")
         elif score == 10:
             await client.say(ctx.message.author.mention + ' got a strike!')
         elif score == 1:
-                await client.say(ctx.message.author.mention + ' knocked down 1 pin. Type `rebowl` to finish.')
+                await client.say(ctx.message.author.mention + ' knocked down 1 pin. Type `finish` to finish.')
         else:
-            await client.say(ctx.message.author.mention + ' knocked down ' + str(score) + ' pins. Type `rebowl` to finish.')
+            await client.say(ctx.message.author.mention + ' knocked down ' + str(score) + ' pins. Type `finish` to finish.')
         
         if score < 10:
             remaining = 10 - score
             new_score = int(random.randint(0, remaining))
-            rebowl = await client.wait_for_message(author=ctx.message.author, timeout=15, content='rebowl')
-            if rebowl != None:
+            finish = await client.wait_for_message(author=ctx.message.author, timeout=15, content='finish')
+            if finish != None:
                 await client.say(ctx.message.author.mention + ' is throwing the ball for the second time...')
                 time.sleep(2)
-                if score > 0:
+                if new_score > 0:
                     player = voice.create_ffmpeg_player('bowling.wav')
                 else:
                     player = voice.create_ffmpeg_player('gutter.wav')
@@ -73,7 +73,7 @@ async def bowl(ctx):
                 final_score = score + new_score
 
                 if final_score == 0:
-                    await client.say(ctx.message.author.mention + " Oof, it's a gutter again!")
+                    await client.say(ctx.message.author.mention + ' Oof, it\'s a gutter again!')
                 elif final_score == 10:
                     await client.say(ctx.message.author.mention + ' got a spare!')
                 elif new_score == 1:
