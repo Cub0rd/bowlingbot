@@ -96,12 +96,12 @@ async def bowl(ctx):
                 pin_number = count
             count +=1
         
-        await client.wait_for_message(author=ctx.message.server.get_member('BOWLINGBALL_USER_ID'), timeout=4)
+        await client.wait_for_message(author=ctx.message.server.get_member('BOWLING_BALL_USER_ID'), timeout=4)
         time.sleep(random.uniform(0, 1.5))
         voice = await client.join_voice_channel(ctx.message.author.voice_channel)
         
-        message = await client.wait_for_message(author=ctx.message.server.get_member('BOWLINGBALL_USER_ID'))
-
+        message = await client.wait_for_message(author=ctx.message.server.get_member('BOWLING_BALL_USER_ID'))
+        time.sleep(1)
         if 'gutter' in message.content:
             pins_left = 10
         elif '1 pin' in message.content:
@@ -125,19 +125,23 @@ async def bowl(ctx):
         elif 'strike' in message.content:
             pins_left = 0
 
-        
-        if pin_number <= pins_left:
+        if pins_left == 0:
+            time.sleep(random.uniform(0, 0.5))
+            await voice.disconnect()
+
+        elif pin_number <= pins_left:
 
             rebowl = await client.wait_for_message(author=ctx.message.author, timeout=15, content='rebowl')
 
             if rebowl != None:
-                await client.wait_for_message(author=ctx.message.server.get_member('BOWLINGBALL_USER_ID'))
-                await client.wait_for_message(author=ctx.message.server.get_member('BOWLINGBALL_USER_ID'))
-      
-        
-        
-    time.sleep(random.uniform(0, 1))
-    await voice.disconnect()
+                await client.wait_for_message(author=ctx.message.server.get_member('BOWLING_BALL_USER_ID'))
+                await client.wait_for_message(author=ctx.message.server.get_member('BOWLING_BALL_USER_ID'))
+            time.sleep(random.uniform(0, 0.5))
+            await voice.disconnect()
+
+        else:
+            time.sleep(random.uniform(0, 0.5))
+            await voice.disconnect()
 
 
 
